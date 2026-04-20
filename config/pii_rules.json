@@ -1,0 +1,37 @@
+[
+    {
+        "name": "CHINESE_ID",
+        "pattern": "[1-9]\\d{5}(18|19|20)\\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]",
+        "mask_with": "[身份证号已脱敏]"
+    },
+    {
+        "name": "PHONE",
+        "pattern": "1[3-9]\\d{9}",
+        "mask_with": "MASK_FUNC"
+    },
+    {
+        "name": "EMAIL",
+        "pattern": "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w+\\b",
+        "mask_with": "MASK_FUNC"
+    },
+    {
+        "name": "BANK_CARD",
+        "pattern": "\\d{16,19}",
+        "mask_with": "[银行卡号已脱敏]"
+    },
+    {
+        "name": "CONTRACT_NUMBER",
+        "pattern": "CT-\\d{4}-\\d{6}",
+        "mask_with": "[合同编号已脱敏]"
+    },
+    {
+        "name": "AMOUNT",
+        "pattern": "(?:￥|¥|RMB|USD|EUR)\\s*\\d{1,3}(?:,\\d{3})*(?:\\.\\d{2})?\\s*(?:元|美元|欧元|人民币)?|\\d+(?:\\.\\d{2})?\\s*(?:元|美元|欧元|人民币)",
+        "mask_with": "[金额已脱敏]"
+    },
+    {
+        "name": "INTERNAL_FINANCE",
+        "pattern": "(?:财务|预算|项目经费|部门成本)",
+        "mask_with": "[内部财务信息已脱敏]"
+    }
+]

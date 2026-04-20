@@ -1,0 +1,20 @@
+[
+    {
+        "name": "SKIP_APPROVAL",
+        "pattern": "跳过审批|不需要审批|直接支付|绕过审核",
+        "match_type": "keyword",
+        "action": "block"
+    },
+    {
+        "name": "TRANSFER_TO_PRIVATE",
+        "pattern": "转至私人账户|支付到私人|汇款到个人账户",
+        "match_type": "keyword",
+        "action": "block"
+    },
+    {
+        "name": "FINANCIAL_VIOLATION",
+        "pattern": "拆分发票|规避审核|私下交易|虚开发票",
+        "match_type": "keyword",
+        "action": "block"
+    }
+]
