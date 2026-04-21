@@ -13,7 +13,7 @@ def test_pii_mask():
 def test_compliance_block():
     engine = ComplianceRuleEngine()
     text = "我建议你跳过审批，直接把钱转至私人账户"
-    safe, rules = engine.evaluate(text)
+    safe, rules, score, max_rule = engine.evaluate(text)
     assert safe == False
     assert "SKIP_APPROVAL" in rules
     assert "TRANSFER_TO_PRIVATE" in rules
@@ -21,6 +21,6 @@ def test_compliance_block():
 def test_compliance_pass():
     engine = ComplianceRuleEngine()
     text = "请按照公司流程提交付款申请"
-    safe, rules = engine.evaluate(text)
+    safe, rules, score, max_rule = engine.evaluate(text)
     assert safe == True
     assert len(rules) == 0

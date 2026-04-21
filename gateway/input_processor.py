@@ -6,6 +6,7 @@ class PIIFilter:
     """敏感信息识别与脱敏器"""
     
     def __init__(self, rules_config_path: str = "config/pii_rules.json"):
+        self.rules_config_path = rules_config_path
         self.rules = self._load_rules(rules_config_path)
     
     def _load_rules(self, path: str) -> List[Dict[str, Any]]:
@@ -29,7 +30,10 @@ class PIIFilter:
             {"name": "AMOUNT", "pattern": r"(?:￥|¥|RMB|USD|EUR)?\s*\d{1,3}(?:,\d{3})*(?:\.\d{2})?\s*(?:元|美元|欧元|人民币)?", "mask_with": "[金额已脱敏]"},
             {"name": "INTERNAL_FINANCE", "pattern": r"(?:财务|预算|项目经费|部门成本)", "mask_with": "[内部财务信息已脱敏]"},
         ]
-    
+    def reload_rules(self):
+        """热重载敏感信息识别规则"""
+        self.rules = self._load_rules(self.rules_config_path)
+
     def mask(self, text: str) -> Tuple[str, List[Dict[str, Any]]]:
         masked_text = text
         findings = []

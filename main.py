@@ -13,6 +13,8 @@ from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import uvicorn
+import os
+from fastapi import Header, HTTPException
 
 # 导入三大核心模块
 from gateway.input_processor import InputProcessor, PIIFilter
@@ -80,7 +82,11 @@ async def chat_completions(request: ChatRequest):
     
     # 3. 调用大模型（此处使用模拟回复，实际可替换为 OpenAI / 内部模型）
     # TODO: 替换为真实的大模型 API 调用，传入 masked_input
-    ai_output = f"这是对「{masked_input}」的模拟回复。"
+    # 临时测试：如果用户输入包含“测试热加载”，则 AI 输出触发热加载规则的关键词
+    if "测试热加载" in masked_input:
+        ai_output = "测试热加载"
+    else:
+        ai_output = f"这是对「{masked_input}」的模拟回复。"
     
     # 4. 输出合规检测
     safe_output, is_safe, audit_info = await output_processor.process(ai_output)
@@ -136,6 +142,15 @@ async def health_check():
     """健康检查接口"""
     return {"status": "healthy", "service": "AI Agent Gateway"}
 
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "change-me-in-production")
+
+@app.post("/admin/reload")
+async def reload_rules(x_admin_token: str = Header(...)):
+    if x_admin_token != ADMIN_TOKEN:
+        raise HTTPException(status_code=401, detail="Invalid admin token")
+    pii_filter.reload_rules()
+    compliance_engine.reload_rules()
+    return {"status": "Rules reloaded successfully", "message": "敏感信息和合规规则已热更新"}
 
 
 if __name__ == "__main__":
